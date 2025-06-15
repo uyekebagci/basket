@@ -1,6 +1,6 @@
-package com.umutbasket.berkyazici.Repository;
+package com.umutbasket.berkyazici.repository;
 
-import com.umutbasket.berkyazici.Entity.Subscriber;
+import com.umutbasket.berkyazici.entity.Subscriber;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

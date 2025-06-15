@@ -1,7 +1,7 @@
-package com.umutbasket.berkyazici.Controller;
+package com.umutbasket.berkyazici.controller;
 
-import com.umutbasket.berkyazici.Entity.User;
-import com.umutbasket.berkyazici.Service.UserService;
+import com.umutbasket.berkyazici.entity.User;
+import com.umutbasket.berkyazici.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class UserControllerV1 {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     @Transactional
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User createdUser = userService.createUser(user);

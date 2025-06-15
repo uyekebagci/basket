@@ -1,4 +1,4 @@
-package com.umutbasket.berkyazici.Entity;
+package com.umutbasket.berkyazici.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

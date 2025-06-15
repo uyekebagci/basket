@@ -1,9 +1,9 @@
-package com.umutbasket.berkyazici.Service;
+package com.umutbasket.berkyazici.service;
 
-import com.umutbasket.berkyazici.Entity.Subscriber;
-import com.umutbasket.berkyazici.Entity.User;
-import com.umutbasket.berkyazici.Repository.SubscriberRepository;
-import com.umutbasket.berkyazici.Repository.UserRepository;
+import com.umutbasket.berkyazici.entity.Subscriber;
+import com.umutbasket.berkyazici.entity.User;
+import com.umutbasket.berkyazici.repository.SubscriberRepository;
+import com.umutbasket.berkyazici.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

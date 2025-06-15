@@ -1,4 +1,4 @@
-package com.umutbasket.berkyazici.Entity;
+package com.umutbasket.berkyazici.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -7,17 +7,22 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +38,48 @@ public class User {
 
     @Valid
     @NotNull
-    @Column
+    @Column(unique = true)
     private String email;
 
-    //TODO: Consider hashing passwords before storing them
     @Column
     private String password;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Kullanıcının rolünü bir string olarak saklayacağız (örn: "USER", "ADMIN")
+        // Bu metot, bu string'i bir GrantedAuthority listesine çevirir.
+        return List.of(new SimpleGrantedAuthority(role));
+    }
+
+    @Override
+    public String getUsername() {
+        // Giriş için benzersiz kimlik olarak email'i kullanacağız.
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        // Şimdilik, kullanıcı hesaplarının süresinin dolmadığını varsayıyoruz.
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        // Şimdilik, kullanıcı hesaplarının kilitlenmediğini varsayıyoruz.
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        // Şimdilik, giriş bilgilerinin süresinin dolmadığını varsayıyoruz.
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        // Şimdilik, tüm kullanıcıların aktif olduğunu varsayıyoruz.
+        return true;
+    }
 
     @NotNull
     @Column
@@ -65,7 +106,7 @@ public class User {
     private String gender;
 
     @Column
-    private String role;
+    private String role = "USER"; //Default
 
     @Column
     private String plan = "Free";
@@ -132,4 +173,8 @@ public class User {
             subscriber.setUser(this);
         }
     }
+
+
+
+
 }

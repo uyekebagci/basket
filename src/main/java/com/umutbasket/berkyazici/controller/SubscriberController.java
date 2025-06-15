@@ -1,7 +1,7 @@
-package com.umutbasket.berkyazici.Controller;
+package com.umutbasket.berkyazici.controller;
 
-import com.umutbasket.berkyazici.Entity.Subscriber;
-import com.umutbasket.berkyazici.Service.SubscriberService;
+import com.umutbasket.berkyazici.entity.Subscriber;
+import com.umutbasket.berkyazici.service.SubscriberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
