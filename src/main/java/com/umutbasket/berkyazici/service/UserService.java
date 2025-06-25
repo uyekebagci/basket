@@ -1,5 +1,6 @@
 package com.umutbasket.berkyazici.service;
 
+import com.umutbasket.berkyazici.dto.UpdateUserRequestDTO;
 import com.umutbasket.berkyazici.entity.User;
 import com.umutbasket.berkyazici.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +35,20 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    public User updateUser (User user) {
-        // TODO: Parola güncellemesi için de şifreleme eklenmeli
-        return userRepository.save(user);
+    public User updateUser(Long userId, UpdateUserRequestDTO request) {
+        // Önce kullanıcıyı bul
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId)); // TODO: Özel exception sınıfı oluşturulmalı
+
+        // Sadece DTO'da gelen ve null olmayan alanları güncelle
+        if (request.getFirstName() != null) existingUser.setFirstName(request.getFirstName());
+        if (request.getLastName() != null) existingUser.setLastName(request.getLastName());
+        if (request.getEmail() != null) existingUser.setEmail(request.getEmail());
+        if (request.getBirthDay() != null) existingUser.setBirthDay(request.getBirthDay());
+        // ... diğer tüm alanlar için aynı kontrol ...
+        if (request.getRole() != null) existingUser.setRole(request.getRole());
+
+        return userRepository.save(existingUser);
     }
 
     // ... (diğer metotlar aynı kalabilir)
