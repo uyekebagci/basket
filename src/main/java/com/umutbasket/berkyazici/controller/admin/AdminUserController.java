@@ -4,7 +4,7 @@ import com.umutbasket.berkyazici.dto.UpdateUserRequestDTO;
 import com.umutbasket.berkyazici.dto.UserResponseDTO;
 import com.umutbasket.berkyazici.entity.User;
 import com.umutbasket.berkyazici.mapper.UserMapper; // YENİ IMPORT
-import com.umutbasket.berkyazici.service.UserService;
+import com.umutbasket.berkyazici.service.admin.AdminUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,12 +20,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AdminUserController {
 
-    private final UserService userService;
+    private final AdminUserService adminUserService;
     private final UserMapper userMapper; // YENİ: Mapper'ı enjekte ediyoruz
 
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+        List<User> users = adminUserService.getAllUsers();
         // Artık dönüşüm işini mapper yapıyor
         List<UserResponseDTO> response = userMapper.toUserResponseDTOList(users);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -33,7 +33,7 @@ public class AdminUserController {
 
     @GetMapping("/{firstName}")
     public ResponseEntity<UserResponseDTO> getClientByFirstName(@PathVariable String firstName) {
-        Optional<User> userOptional = userService.getClientByFirstName(firstName);
+        Optional<User> userOptional = adminUserService.getClientByFirstName(firstName);
         log.info("Users has queried according to firstName");
 
         return userOptional
@@ -44,7 +44,7 @@ public class AdminUserController {
 
     @PutMapping("/update/{userId}") // ID'yi path'ten almak daha standarttır
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long userId, @RequestBody UpdateUserRequestDTO request) {
-        User updatedUser = userService.updateUser(userId, request); // Servis metodunu da güncelleyeceğiz
+        User updatedUser = adminUserService.updateUser(userId, request); // Servis metodunu da güncelleyeceğiz
         log.info("User with ID: {} has been updated", userId);
         return new ResponseEntity<>(userMapper.toUserResponseDTO(updatedUser), HttpStatus.OK);
     }

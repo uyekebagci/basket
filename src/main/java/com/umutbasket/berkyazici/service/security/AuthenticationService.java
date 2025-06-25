@@ -1,4 +1,4 @@
-package com.umutbasket.berkyazici.service;
+package com.umutbasket.berkyazici.service.security;
 
 import com.umutbasket.berkyazici.dto.AuthenticationRequest;
 import com.umutbasket.berkyazici.dto.AuthenticationResponse;

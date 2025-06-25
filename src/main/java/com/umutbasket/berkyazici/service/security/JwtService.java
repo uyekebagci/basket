@@ -1,4 +1,4 @@
-package com.umutbasket.berkyazici.service; // veya security paketin
+package com.umutbasket.berkyazici.service.security; // veya security paketin
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -1,4 +1,4 @@
-package com.umutbasket.berkyazici.service;
+package com.umutbasket.berkyazici.service.subscriber;
 
 import com.umutbasket.berkyazici.entity.Subscriber;
 import com.umutbasket.berkyazici.entity.User;

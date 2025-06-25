@@ -5,14 +5,13 @@ import com.umutbasket.berkyazici.dto.SubscriberResponseDTO;
 import com.umutbasket.berkyazici.dto.UpdateSubscriptionRequestDTO;
 import com.umutbasket.berkyazici.entity.Subscriber;
 import com.umutbasket.berkyazici.mapper.SubscriberMapper; // YENİ IMPORT
-import com.umutbasket.berkyazici.service.SubscriberService;
+import com.umutbasket.berkyazici.service.subscriber.SubscriberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/subscribers")

@@ -1,7 +1,7 @@
 package com.umutbasket.berkyazici.config;
 
 import com.umutbasket.berkyazici.entity.Role;
-import com.umutbasket.berkyazici.service.UserDetailsServiceImpl;
+import com.umutbasket.berkyazici.service.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,6 +51,7 @@ public class SecurityConfig {
                   req.requestMatchers("/api/public/**")
                           .permitAll()
                           .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
+                          .requestMatchers("/api/user/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                           .anyRequest()
                           .authenticated()
           )

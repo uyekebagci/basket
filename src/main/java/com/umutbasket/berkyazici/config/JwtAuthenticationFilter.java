@@ -1,6 +1,6 @@
 package com.umutbasket.berkyazici.config;
 
-import com.umutbasket.berkyazici.service.JwtService;
+import com.umutbasket.berkyazici.service.security.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
