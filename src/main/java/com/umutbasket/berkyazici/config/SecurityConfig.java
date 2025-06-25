@@ -48,17 +48,15 @@ public class SecurityConfig {
   http
           .csrf(csrf -> csrf.disable())
           .authorizeHttpRequests(req ->
-                  req.requestMatchers("/api/auth/**", "/api/register/**")
+                  req.requestMatchers("/api/public/**")
                           .permitAll()
                           .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
                           .anyRequest()
                           .authenticated()
           )
-          // --- HATANIN KAYNAĞI OLAN EKSİK SATIRLAR ---
           .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
           .authenticationProvider(authenticationProvider())
           .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-  // --- EKSİK SATIRLAR BİTTİ ---
 
   return http.build();
  }
