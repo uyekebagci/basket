@@ -48,7 +48,7 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Kullanıcının rolünü bir string olarak saklayacağız (örn: "USER", "ADMIN")
         // Bu metot, bu string'i bir GrantedAuthority listesine çevirir.
-        return List.of(new SimpleGrantedAuthority(role));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
@@ -105,8 +105,9 @@ public class User implements UserDetails {
     @Column
     private String gender;
 
+    @Enumerated(EnumType.STRING) // Bu anotasyon enum'ın ismini (USER, ADMIN) veritabanına String olarak kaydeder.
     @Column
-    private String role = "USER"; //Default
+    private Role role = Role.USER; // Tipi String'den Role'a çeviriyoruz ve varsayılan değeri ayarlıyoruz.
 
     @Column
     private String plan = "Free";
@@ -127,7 +128,7 @@ public class User implements UserDetails {
     // Constructor updated to reflect userId
     public User(Long userId, String firstName, String lastName, String email, String password, Date birthDay,
                 Integer height, Double weight, String gender,
-                String role, String plan) {
+                Role role, String plan) {
         this.userId = userId; // Changed from clientId to userId
         this.firstName = firstName;
         this.lastName = lastName;

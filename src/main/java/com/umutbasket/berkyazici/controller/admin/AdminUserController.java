@@ -1,4 +1,4 @@
-package com.umutbasket.berkyazici.controller;
+package com.umutbasket.berkyazici.controller.admin;
 
 import com.umutbasket.berkyazici.entity.User;
 import com.umutbasket.berkyazici.service.UserService;
@@ -14,13 +14,13 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/users")
-public class UserControllerV1 {
+@RequestMapping("/api/admin/users")
+public class AdminUserController {
 
     @Autowired
     private final UserService userService;
 
-    public UserControllerV1(UserService userService) {
+    public AdminUserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -28,14 +28,6 @@ public class UserControllerV1 {
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-
-    @PostMapping
-    @Transactional
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        log.info("User Creation Progress has started");
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @GetMapping("/{firstName}")

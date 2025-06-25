@@ -1,5 +1,6 @@
 package com.umutbasket.berkyazici.config;
 
+import com.umutbasket.berkyazici.entity.Role;
 import com.umutbasket.berkyazici.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -10,8 +11,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.http.SessionCreationPolicy; // EKSİK IMPORT
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,24 +19,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor // @Autowired yerine constructor injection için
+@RequiredArgsConstructor
 public class SecurityConfig {
 
- private final UserDetailsServiceImpl userDetailsService; // Kendi UserDetailsService'imiz
-
  private final JwtAuthenticationFilter jwtAuthFilter;
+ private final UserDetailsServiceImpl userDetailsService;
 
  @Bean
  public PasswordEncoder passwordEncoder() {
   return new BCryptPasswordEncoder();
  }
 
-
- /**
-  * YENİ: AuthenticationProvider Bean'i
-  * Bu bean, Spring Security'e kullanıcı detaylarını nereden alacağını (userDetailsService)
-  * ve parolaları nasıl karşılaştıracağını (passwordEncoder) söyler.
-  */
  @Bean
  public AuthenticationProvider authenticationProvider() {
   DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -45,11 +38,6 @@ public class SecurityConfig {
   return authProvider;
  }
 
- /**
-  * YENİ: AuthenticationManager Bean'i
-  * Spring Security 6+ ile birlikte AuthenticationManager'ı doğrudan bu şekilde alıyoruz.
-  * Bu, AuthenticationService'de kullandığımız ana kimlik doğrulama mekanizmasıdır.
-  */
  @Bean
  public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
   return config.getAuthenticationManager();
@@ -58,20 +46,20 @@ public class SecurityConfig {
  @Bean
  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
   http
-          .csrf(AbstractHttpConfigurer::disable)
-          .authorizeHttpRequests(auth -> auth
-                  .requestMatchers("/api/users/create", "/api/auth/**").permitAll()
-                  .anyRequest().authenticated()
+          .csrf(csrf -> csrf.disable())
+          .authorizeHttpRequests(req ->
+                  req.requestMatchers("/api/auth/**", "/api/register/**")
+                          .permitAll()
+                          .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
+                          .anyRequest()
+                          .authenticated()
           )
-          // YENİ: Session yönetimini stateless (durumsuz) olarak ayarlıyoruz.
-          // JWT kullandığımız için sunucuda session tutulmasına gerek yok.
+          // --- HATANIN KAYNAĞI OLAN EKSİK SATIRLAR ---
           .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
           .authenticationProvider(authenticationProvider())
-          // YENİ: Oluşturduğumuz JWT filtresini, standart kullanıcı adı/parola filtresinden
-          // ÖNCE çalışacak şekilde zincire ekliyoruz.
           .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+  // --- EKSİK SATIRLAR BİTTİ ---
 
   return http.build();
  }
-
 }

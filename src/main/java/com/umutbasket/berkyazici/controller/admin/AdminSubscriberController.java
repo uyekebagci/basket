@@ -1,4 +1,4 @@
-package com.umutbasket.berkyazici.controller;
+package com.umutbasket.berkyazici.controller.admin;
 
 import com.umutbasket.berkyazici.entity.Subscriber;
 import com.umutbasket.berkyazici.service.SubscriberService;
@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/subscribers")
-public class SubscriberController {
+@RequestMapping("/api/admin/subscribers")
+public class AdminSubscriberController {
 
     private final SubscriberService subscriberService;
 
     @Autowired
-    public SubscriberController(SubscriberService subscriberService) {
+    public AdminSubscriberController(SubscriberService subscriberService) {
         this.subscriberService = subscriberService;
     }
 

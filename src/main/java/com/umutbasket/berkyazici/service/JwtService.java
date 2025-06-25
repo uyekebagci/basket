@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +47,11 @@ public class JwtService {
      * Bir kullanıcı için JWT üretir.
      */
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        // YENİ: Roller için ekstra bir "claim" mapi oluşturuyoruz.
+        Map<String, Object> extraClaims = new HashMap<>();
+        // Roller, "authorities" adında bir listeye ekleniyor.
+        extraClaims.put("authorities", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+        return generateToken(extraClaims, userDetails);
     }
 
     /**
@@ -60,7 +65,7 @@ public class JwtService {
     ) {
         return Jwts
                 .builder()
-                .setClaims(extraClaims)
+                .setClaims(extraClaims) // Ekstra claim'leri (roller dahil) token'a ekle
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
@@ -94,7 +99,7 @@ public class JwtService {
     /**
      * Gelen token'ı ve gizli anahtarı kullanarak tüm "claim"leri ayrıştırır ve çıkartır.
      */
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
                 .setSigningKey(getSignInKey())
