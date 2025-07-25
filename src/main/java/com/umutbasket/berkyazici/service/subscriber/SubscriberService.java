@@ -1,7 +1,9 @@
 package com.umutbasket.berkyazici.service.subscriber;
 
+import com.umutbasket.berkyazici.entity.Plan;
 import com.umutbasket.berkyazici.entity.Subscriber;
 import com.umutbasket.berkyazici.entity.User;
+import com.umutbasket.berkyazici.repository.PlanRepository;
 import com.umutbasket.berkyazici.repository.SubscriberRepository;
 import com.umutbasket.berkyazici.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,14 @@ public class SubscriberService {
 
     private final SubscriberRepository subscriberRepository;
     private final UserRepository userRepository;
+    private PlanRepository planRepository;
+
 
     @Autowired
-    public SubscriberService(SubscriberRepository subscriberRepository, UserRepository userRepository) {
+    public SubscriberService(SubscriberRepository subscriberRepository, UserRepository userRepository, PlanRepository planRepository) {
         this.subscriberRepository = subscriberRepository;
         this.userRepository = userRepository;
+        this.planRepository = planRepository;
     }
 
     public List<Subscriber> getAllSubscribers() {
@@ -43,6 +48,26 @@ public class SubscriberService {
 
     public Optional<Subscriber> getSubscriberByUserId(Long userId) {
         return subscriberRepository.findByUserUserId(userId);
+    }
+
+    public Subscriber purchasePlan(Long userId, Long planId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Plan plan = planRepository.findById(planId)
+                .orElseThrow(() -> new RuntimeException("Plan not found"));
+
+        LocalDateTime startDate = LocalDateTime.now();
+        LocalDateTime endDate = plan.isUnlimited() ? null : startDate.plusDays(plan.getDurationInDays());
+
+        Subscriber subscriber = subscriberRepository.findByUserId(userId)
+                .orElse(new Subscriber());
+        subscriber.setUser(user);
+        subscriber.setPlan(plan);
+        subscriber.setSubscriptionStartDate(startDate);
+        subscriber.setSubscriptionEndDate(endDate);
+
+        return subscriberRepository.save(subscriber);
     }
 
     @Transactional

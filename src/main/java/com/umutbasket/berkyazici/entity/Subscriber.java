@@ -22,6 +22,9 @@ public class Subscriber {
     @NotNull
     private User user;
 
+    @ManyToOne
+    private Plan plan;
+
     @Column(name = "subscription_start_date")
     private LocalDateTime subscriptionStartDate;
 
