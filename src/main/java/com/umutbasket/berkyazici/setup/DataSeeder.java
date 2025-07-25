@@ -1,9 +1,13 @@
 package com.umutbasket.berkyazici;
 
+import com.umutbasket.berkyazici.entity.Plan;
 import com.umutbasket.berkyazici.entity.Role;
 import com.umutbasket.berkyazici.entity.User;
+import com.umutbasket.berkyazici.repository.PlanRepository;
 import com.umutbasket.berkyazici.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -18,6 +22,9 @@ public class DataSeeder implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private PlanRepository planRepository;
+
     @Override
     public void run(String... args) throws Exception {
         // DAHA SAĞLAM KONTROL: Veritabanında admin@example.com email'ine sahip bir kullanıcı var mı?
@@ -25,6 +32,17 @@ public class DataSeeder implements CommandLineRunner {
             createAdminUser();
         }
     }
+
+    @PostConstruct
+    public void seedPlans() {
+        if (planRepository.count() == 0) {
+            planRepository.save(Plan.builder().name("Basic").description("Temel plan, sınırlı erişim").build());
+            planRepository.save(Plan.builder().name("Standard").description("Daha fazla içerik, orta seviye").build());
+            planRepository.save(Plan.builder().name("Premium").description("Tüm içeriklere erişim").build());
+            planRepository.save(Plan.builder().name("VIP").description("Ekstra avantajlar").build());
+        }
+    }
+
 
     private void createAdminUser() {
         User adminUser = new User();
