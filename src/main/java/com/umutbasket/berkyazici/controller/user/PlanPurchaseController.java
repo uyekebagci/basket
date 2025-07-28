@@ -1,5 +1,5 @@
 
-package com.umutbasket.berkyazici.controller;
+package com.umutbasket.berkyazici.controller.user;
 
 import com.umutbasket.berkyazici.dto.PurchasePlanRequestDTO;
 import com.umutbasket.berkyazici.entity.Subscriber;
@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/plans")
+@RequestMapping("/api/user/plans")
 public class PlanPurchaseController {
 
     private final SubscriberService subscriberService;
@@ -19,6 +19,7 @@ public class PlanPurchaseController {
 
     @PostMapping("/purchase")
     public ResponseEntity<Subscriber> purchasePlan(@RequestBody PurchasePlanRequestDTO request) {
+        System.out.println(">>> purchasePlan endpoint triggered!");
         Subscriber subscriber = subscriberService.purchasePlan(request.getUserId(), request.getPlanId());
         return ResponseEntity.ok(subscriber);
     }

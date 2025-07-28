@@ -11,6 +11,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy; // EKSİK IMPORT
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,11 +47,11 @@ public class SecurityConfig {
  @Bean
  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
   http
-          .csrf(csrf -> csrf.disable())
+          .csrf(AbstractHttpConfigurer::disable)
           .authorizeHttpRequests(req ->
-                  req.requestMatchers("/api/public/**")
-                          .permitAll()
-                          .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
+                  req.requestMatchers("/api/public/login", "/api/public/register").permitAll()
+                          .requestMatchers("/api/public/plans", "/api/public/plans/").permitAll()
+                          .requestMatchers("/api/public/plans/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name()).requestMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
                           .requestMatchers("/api/user/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
                           .anyRequest()
                           .authenticated()

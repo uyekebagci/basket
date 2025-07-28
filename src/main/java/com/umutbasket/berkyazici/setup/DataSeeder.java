@@ -33,17 +33,6 @@ public class DataSeeder implements CommandLineRunner {
         }
     }
 
-    @PostConstruct
-    public void seedPlans() {
-        if (planRepository.count() == 0) {
-            planRepository.save(Plan.builder().name("Basic").description("Temel plan, sınırlı erişim").build());
-            planRepository.save(Plan.builder().name("Standard").description("Daha fazla içerik, orta seviye").build());
-            planRepository.save(Plan.builder().name("Premium").description("Tüm içeriklere erişim").build());
-            planRepository.save(Plan.builder().name("VIP").description("Ekstra avantajlar").build());
-        }
-    }
-
-
     private void createAdminUser() {
         User adminUser = new User();
         adminUser.setFirstName("Admin");

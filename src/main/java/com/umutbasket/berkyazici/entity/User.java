@@ -38,7 +38,7 @@ public class User implements UserDetails {
 
     @Valid
     @NotNull
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column
@@ -109,9 +109,6 @@ public class User implements UserDetails {
     @Column
     private Role role = Role.USER; // Tipi String'den Role'a çeviriyoruz ve varsayılan değeri ayarlıyoruz.
 
-    @Column
-    private String plan = "Free";
-
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
@@ -139,7 +136,6 @@ public class User implements UserDetails {
         this.weight = weight;
         this.gender = gender;
         this.role = role;
-        this.plan = plan;
     }
 
     private void calculateAge() {

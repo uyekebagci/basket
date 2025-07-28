@@ -33,6 +33,10 @@ public class UserService {
         newUser.setGender(request.getGender());
         newUser.setRole(Role.USER);
 
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Bu e-posta adresi zaten kullanılıyor.");
+        }
+
         return userRepository.save(newUser);
     }
 

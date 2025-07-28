@@ -28,4 +28,6 @@ public class Plan {
         this.durationInDays = durationInDays;
     }
 
+    public Plan() {
+    }
 }

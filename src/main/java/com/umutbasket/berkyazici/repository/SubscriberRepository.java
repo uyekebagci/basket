@@ -15,6 +15,4 @@ public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
     List<Subscriber> findByIsActiveTrue();
 
     List<Subscriber> findByIsActiveFalse();
-
-    Optional<Subscriber> findByUserId(Long userId);
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/plans")
+@RequestMapping("/api/public")
 public class PlanController {
 
     private final PlanService planService;
@@ -17,7 +17,7 @@ public class PlanController {
         this.planService = planService;
     }
 
-    @GetMapping
+    @GetMapping("/plans")
     public List<Plan> getAllPlans() {
         return planService.getAllPlans();
     }

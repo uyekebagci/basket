@@ -60,34 +60,15 @@ public class SubscriberService {
         LocalDateTime startDate = LocalDateTime.now();
         LocalDateTime endDate = plan.isUnlimited() ? null : startDate.plusDays(plan.getDurationInDays());
 
-        Subscriber subscriber = subscriberRepository.findByUserId(userId)
+        Subscriber subscriber = subscriberRepository.findByUserUserId(userId)
                 .orElse(new Subscriber());
         subscriber.setUser(user);
         subscriber.setPlan(plan);
         subscriber.setSubscriptionStartDate(startDate);
         subscriber.setSubscriptionEndDate(endDate);
+        subscriber.setIsActive(true);
 
         return subscriberRepository.save(subscriber);
-    }
-
-    @Transactional
-    public Subscriber createSubscription(Long userId, String planType) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
-
-        if (user.getSubscriber() != null && user.getSubscriber().getIsActive()) {
-            throw new RuntimeException("User already has an active subscription.");
-        }
-
-        Subscriber subscriber = new Subscriber();
-        subscriber.setSubscriptionStartDate(LocalDateTime.now());
-        subscriber.setIsActive(true);
-        subscriber.setPlanType(planType);
-
-        user.setSubscriber(subscriber);
-        userRepository.save(user);
-
-        return subscriber;
     }
 
     @Transactional

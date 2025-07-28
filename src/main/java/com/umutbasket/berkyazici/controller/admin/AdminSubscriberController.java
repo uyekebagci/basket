@@ -54,17 +54,6 @@ public class AdminSubscriberController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<SubscriberResponseDTO> createSubscription(@RequestBody CreateSubscriptionRequestDTO request) {
-        try {
-            Subscriber createdSubscriber = subscriberService.createSubscription(request.getUserId(), request.getPlanType());
-            return new ResponseEntity<>(subscriberMapper.toSubscriberResponseDTO(createdSubscriber), HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            System.err.println("Error creating subscription: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // TODO: Global exception handling
-        }
-    }
-
     @PutMapping("/{subscriberId}")
     public ResponseEntity<SubscriberResponseDTO> updateSubscription(
             @PathVariable Long subscriberId,
